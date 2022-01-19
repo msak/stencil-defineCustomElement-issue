@@ -13,7 +13,7 @@ Please use `yalc link lib` on main_project once to link to local lib package.
 Experiments:
 
 State: good (partially)
-Commit: Hash
+Commit hash: fc0ebd3f6a4e756c409c8943917c538c81e4fba6
 Titel: render component from lib with original tag as well as prefixed.
 Description: my-component includes a slot and will be rendered properly on app-home by original as well as prefixed tag name.
 Issues: 
@@ -36,7 +36,7 @@ Issues:
 -----
 
 State: bad
-Commit: 
+Commit hash: 800ed183595ba7c3318a4d743b10e71d9aeb10c2 
 Titel: render component from lib (original and and prefixed). my-component renders a child component (my-child)
 Description: my-component includes my-child. The build process of the lib will create a file called ./dist/my-child_2.entry.js. 
               The build process of main_project on the other hand creates a file ./www/build/my-child.entry.js. Unfortunatelly stencil tries to 
