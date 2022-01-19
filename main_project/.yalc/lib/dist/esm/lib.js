@@ -1,4 +1,4 @@
-import { p as promiseResolve, b as bootstrapLazy } from './index-09186c6d.js';
+import { p as promiseResolve, b as bootstrapLazy } from './index-0b44c650.js';
 
 /*
  Stencil Client Patch Browser v2.12.1 | MIT Licensed | https://stenciljs.com
@@ -13,5 +13,5 @@ const patchBrowser = () => {
 };
 
 patchBrowser().then(options => {
-  return bootstrapLazy([["my-component",[[1,"my-component",{"first":[1],"middle":[1],"last":[1]}]]]], options);
+  return bootstrapLazy([["my-child_2",[[1,"my-component",{"first":[1],"middle":[1],"last":[1]}],[1,"my-child"]]]], options);
 });

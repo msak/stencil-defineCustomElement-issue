@@ -1,4 +1,16 @@
-import { r as registerInstance, h } from './index-7a25307b.js';
+import { r as registerInstance, h, H as Host } from './index-0b44c650.js';
+
+const myChildCss = ":host{display:block}";
+
+let MyChild = class {
+  constructor(hostRef) {
+    registerInstance(this, hostRef);
+  }
+  render() {
+    return (h(Host, null, "... and this is my child!"));
+  }
+};
+MyChild.style = myChildCss;
 
 function format(first, middle, last) {
   return (first || '') + (middle ? ` ${middle}` : '') + (last ? ` ${last}` : '');
@@ -19,4 +31,4 @@ let MyComponent = class {
 };
 MyComponent.style = myComponentCss;
 
-export { MyComponent as my_component };
+export { MyChild as my_child, MyComponent as my_component };

@@ -1,5 +1,6 @@
 {
   "entries": [
+    "./components/my-child/my-child.js",
     "./components/my-component/my-component.js"
   ],
   "compiler": {

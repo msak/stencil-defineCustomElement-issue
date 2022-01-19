@@ -1,23 +1,36 @@
-'use strict';
+function applyPolyfills() {
+  var promises = [];
+  if (typeof window !== 'undefined') {
+    var win = window;
 
-function _interopNamespace(e) {
-  if (e && e.__esModule) return e;
-  var n = Object.create(null);
-  if (e) {
-    Object.keys(e).forEach(function (k) {
-      if (k !== 'default') {
-        var d = Object.getOwnPropertyDescriptor(e, k);
-        Object.defineProperty(n, k, d.get ? d : {
-          enumerable: true,
-          get: function () {
-            return e[k];
-          }
-        });
+    if (!win.customElements ||
+      (win.Element && (!win.Element.prototype.closest || !win.Element.prototype.matches || !win.Element.prototype.remove || !win.Element.prototype.getRootNode))) {
+      promises.push(import(/* webpackChunkName: "polyfills-dom" */ './dom-5e409d03.js'));
+    }
+
+    var checkIfURLIsSupported = function() {
+      try {
+        var u = new URL('b', 'http://a');
+        u.pathname = 'c%20d';
+        return (u.href === 'http://a/c%20d') && u.searchParams;
+      } catch (e) {
+        return false;
       }
-    });
+    };
+
+    if (
+      'function' !== typeof Object.assign || !Object.entries ||
+      !Array.prototype.find || !Array.prototype.includes ||
+      !String.prototype.startsWith || !String.prototype.endsWith ||
+      (win.NodeList && !win.NodeList.prototype.forEach) ||
+      !win.fetch ||
+      !checkIfURLIsSupported() ||
+      typeof WeakMap == 'undefined'
+    ) {
+      promises.push(import(/* webpackChunkName: "polyfills-core-js" */ './core-js-10ddcd8e.js'));
+    }
   }
-  n['default'] = e;
-  return Object.freeze(n);
+  return Promise.all(promises);
 }
 
 const NAMESPACE = 'lib';
@@ -876,11 +889,11 @@ const loadModule = (cmpMeta, hostRef, hmrVersionId) => {
     if (module) {
         return module[exportName];
     }
-    return Promise.resolve().then(function () { return /*#__PURE__*/_interopNamespace(require(
+    return import(
     /* webpackInclude: /\.entry\.js$/ */
     /* webpackExclude: /\.system\.entry\.js$/ */
     /* webpackMode: "lazy" */
-    `./${bundleId}.entry.js${''}`)); }).then((importedModule) => {
+    `./${bundleId}.entry.js${''}`).then((importedModule) => {
         {
             cmpModules.set(bundleId, importedModule);
         }
@@ -931,7 +944,29 @@ const flush = () => {
 const nextTick = /*@__PURE__*/ (cb) => promiseResolve().then(cb);
 const writeTask = /*@__PURE__*/ queueTask(queueDomWrites, true);
 
-exports.bootstrapLazy = bootstrapLazy;
-exports.h = h;
-exports.promiseResolve = promiseResolve;
-exports.registerInstance = registerInstance;
+/*
+ Stencil Client Patch Esm v2.12.1 | MIT Licensed | https://stenciljs.com
+ */
+const patchEsm = () => {
+    return promiseResolve();
+};
+
+const defineCustomElements = (win, options) => {
+  if (typeof window === 'undefined') return Promise.resolve();
+  return patchEsm().then(() => {
+  return bootstrapLazy([["my-child_2",[[1,"my-component",{"first":[1],"middle":[1],"last":[1]}],[1,"my-child"]]]], options);
+  });
+};
+
+const appGlobalScript = async () => {
+  defineCustomElements(window, { transformTagName: (tagName) => `prefix-${tagName}` });
+  /**
+   * The code to be executed should be placed within a default function that is
+   * exported by the global script. Ensure all of the code in the global script
+   * is wrapped in the function() that is exported.
+   */
+};
+
+const globalScripts = appGlobalScript;
+
+export { globalScripts as g };

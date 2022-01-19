@@ -7,7 +7,10 @@ export class MyComponent {
   render() {
     return h("div", null,
       "Hello, World! I'm ",
-      this.getText());
+      this.getText(),
+      h("span", null,
+        h("slot", null)),
+      h("my-child", null));
   }
   static get is() { return "my-component"; }
   static get encapsulation() { return "shadow"; }

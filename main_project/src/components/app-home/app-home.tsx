@@ -8,8 +8,8 @@ export class AppHome {
   render() {
     return (
       <Host>
-        <my-component first="MY-COMPONENT"></my-component>
-        <prefix-my-component first="PREFIX-MY-COMPONENT"></prefix-my-component>
+        <my-component first="MY-COMPONENT">👻</my-component>
+        <prefix-my-component first="PREFIX-MY-COMPONENT">🤓</prefix-my-component>
       </Host>
     );
   }

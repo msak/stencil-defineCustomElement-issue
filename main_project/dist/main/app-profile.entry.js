@@ -1,4 +1,4 @@
-import { r as registerInstance, h } from './index-8c7f86fe.js';
+import { r as registerInstance, h } from './index-7a25307b.js';
 
 const appProfileCss = ".app-profile{padding:10px}";
 

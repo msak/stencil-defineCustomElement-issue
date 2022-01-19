@@ -1,4 +1,5 @@
 import { HTMLElement, h, proxyCustomElement } from '@stencil/core/internal/client';
+import { d as defineCustomElement$2 } from './my-child2.js';
 
 function format(first, middle, last) {
   return (first || '') + (middle ? ` ${middle}` : '') + (last ? ` ${last}` : '');
@@ -16,7 +17,7 @@ let MyComponent$1 = class extends HTMLElement {
     return format(this.first, this.middle, this.last);
   }
   render() {
-    return h("div", null, "Hello, World! I'm ", this.getText());
+    return h("div", null, "Hello, World! I'm ", this.getText(), h("span", null, h("slot", null)), h("my-child", null));
   }
   static get style() { return myComponentCss; }
 };
@@ -29,11 +30,16 @@ function defineCustomElement$1() {
   if (typeof customElements === "undefined") {
     return;
   }
-  const components = ["my-component"];
+  const components = ["my-component", "my-child"];
   components.forEach(tagName => { switch (tagName) {
     case "my-component":
       if (!customElements.get(tagName)) {
         customElements.define(tagName, MyComponent$1);
+      }
+      break;
+    case "my-child":
+      if (!customElements.get(tagName)) {
+        defineCustomElement$2();
       }
       break;
   } });

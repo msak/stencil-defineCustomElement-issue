@@ -1,3 +1,38 @@
+function applyPolyfills() {
+  var promises = [];
+  if (typeof window !== 'undefined') {
+    var win = window;
+
+    if (!win.customElements ||
+      (win.Element && (!win.Element.prototype.closest || !win.Element.prototype.matches || !win.Element.prototype.remove || !win.Element.prototype.getRootNode))) {
+      promises.push(import(/* webpackChunkName: "polyfills-dom" */ './dom-5e409d03.js'));
+    }
+
+    var checkIfURLIsSupported = function() {
+      try {
+        var u = new URL('b', 'http://a');
+        u.pathname = 'c%20d';
+        return (u.href === 'http://a/c%20d') && u.searchParams;
+      } catch (e) {
+        return false;
+      }
+    };
+
+    if (
+      'function' !== typeof Object.assign || !Object.entries ||
+      !Array.prototype.find || !Array.prototype.includes ||
+      !String.prototype.startsWith || !String.prototype.endsWith ||
+      (win.NodeList && !win.NodeList.prototype.forEach) ||
+      !win.fetch ||
+      !checkIfURLIsSupported() ||
+      typeof WeakMap == 'undefined'
+    ) {
+      promises.push(import(/* webpackChunkName: "polyfills-core-js" */ './core-js-10ddcd8e.js'));
+    }
+  }
+  return Promise.all(promises);
+}
+
 const NAMESPACE = 'lib';
 
 let scopeId;
@@ -909,4 +944,29 @@ const flush = () => {
 const nextTick = /*@__PURE__*/ (cb) => promiseResolve().then(cb);
 const writeTask = /*@__PURE__*/ queueTask(queueDomWrites, true);
 
-export { bootstrapLazy as b, h, promiseResolve as p, registerInstance as r };
+/*
+ Stencil Client Patch Esm v2.12.1 | MIT Licensed | https://stenciljs.com
+ */
+const patchEsm = () => {
+    return promiseResolve();
+};
+
+const defineCustomElements = (win, options) => {
+  if (typeof window === 'undefined') return Promise.resolve();
+  return patchEsm().then(() => {
+  return bootstrapLazy([["my-child_2",[[1,"my-component",{"first":[1],"middle":[1],"last":[1]}],[1,"my-child"]]]], options);
+  });
+};
+
+const appGlobalScript = async () => {
+  defineCustomElements(window, { transformTagName: (tagName) => `prefix-${tagName}` });
+  /**
+   * The code to be executed should be placed within a default function that is
+   * exported by the global script. Ensure all of the code in the global script
+   * is wrapped in the function() that is exported.
+   */
+};
+
+const globalScripts = appGlobalScript;
+
+export { globalScripts as g };
