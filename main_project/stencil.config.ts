@@ -9,6 +9,7 @@ export const config: Config = {
   taskQueue: 'async',
   extras: {
     tagNameTransform: true,
+    scriptDataOpts: true,
   },
   outputTargets: [
     {

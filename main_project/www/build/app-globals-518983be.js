@@ -1,13 +1,8 @@
-import 'lib';
-
 // import {defineCustomElements} from 'lib/loader';
 document.querySelector('script[data-stencil-namespace=main]')['data-opts'] = {
-  transformTagName : (tagName) => tagName.lastIndexOf('my-') === 0 ? `prefix-${tagName}` : tagName
+  transformTagName: (tagName) => tagName.lastIndexOf('my-') === 0 ? `prefix-${tagName}` : tagName
 };
-
-
-export default async () => {
-  
+const appGlobalScript = async () => {
   // defineCustomElements(window, { transformTagName: (tagName) => `prefix-${tagName}` });
   /**
    * The code to be executed should be placed within a default function that is
@@ -15,3 +10,7 @@ export default async () => {
    * is wrapped in the function() that is exported.
    */
 };
+
+const globalScripts = appGlobalScript;
+
+export { globalScripts as g };
