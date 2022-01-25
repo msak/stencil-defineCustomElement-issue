@@ -1,13 +1,8 @@
-import { E as Env } from './index-931f4a75.js';
+import { E as Env } from './index-3ef34d12.js';
 
 // import {defineCustomElements} from 'lib/loader';
-var origin = customElements.define;
-var context = customElements;
-customElements.define = function (tag, ctr, opt, pre) {
-  if (tag.indexOf('__prefix__-') === 0) {
-    tag = tag.replace('__prefix__', pre ? pre : Env['prefix']);
-  }
-  return origin.call(context, tag, ctr, opt);
+document.querySelector('script[data-stencil-namespace=main]')['data-opts'] = {
+  transformTagName: (tagName) => tagName.lastIndexOf('__prefix__') === 0 ? tagName.replace('__prefix__', Env['prefix']) : tagName
 };
 const appGlobalScript = async () => {
   // defineCustomElements(window, { transformTagName: (tagName) => `prefix-${tagName}` });

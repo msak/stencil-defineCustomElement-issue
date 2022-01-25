@@ -1,4 +1,4 @@
-import { r as registerInstance, h, e as Host } from './index-931f4a75.js';
+import { r as registerInstance, h, e as Host } from './index-3ef34d12.js';
 
 const myChildCss = ":host{display:block}";
 

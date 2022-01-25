@@ -1,4 +1,4 @@
-import { r as registerInstance, h } from './index-931f4a75.js';
+import { r as registerInstance, h } from './index-3ef34d12.js';
 
 const appRootCss = "header{background:#5851ff;color:white;height:56px;display:flex;align-items:center;box-shadow:0 2px 5px 0 rgba(0, 0, 0, 0.26)}h1{font-size:1.4rem;font-weight:500;color:#fff;padding:0 12px}";
 

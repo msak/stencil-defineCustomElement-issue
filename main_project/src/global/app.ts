@@ -3,15 +3,9 @@ import {Env} from '@stencil/core';
 
 // import {defineCustomElements} from 'lib/loader';
 
-var origin = customElements.define;
-var context = customElements;
-
-customElements.define = function(tag, ctr, opt, pre) {
-  if (tag.indexOf('__prefix__-') === 0) {
-    tag = tag.replace('__prefix__', pre ? pre : Env['prefix']);
-  }
-  return origin.call(context, tag, ctr, opt);
-} as any
+document.querySelector('script[data-stencil-namespace=main]')['data-opts'] = {
+  transformTagName : (tagName) => tagName.lastIndexOf('__prefix__') === 0 ? tagName.replace('__prefix__', Env['prefix']) : tagName
+};
 
 export default async () => {
 

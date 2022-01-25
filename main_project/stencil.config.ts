@@ -12,6 +12,7 @@ export const config: Config = {
   },
   extras: {
     tagNameTransform: true,
+    scriptDataOpts: true,
   },
   outputTargets: [
     {
