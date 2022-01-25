@@ -6,6 +6,7 @@ export const config: Config = {
   extras: {
     tagNameTransform: true,
   },
+  buildEs5: true,
   outputTargets: [
     {
       type: 'dist',

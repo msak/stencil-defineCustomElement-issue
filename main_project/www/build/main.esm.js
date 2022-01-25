@@ -1,5 +1,5 @@
-import { B as BUILD, c as consoleDevInfo, p as plt, w as win, H, d as doc, N as NAMESPACE, a as promiseResolve, b as bootstrapLazy } from './index-7a25307b.js';
-import { g as globalScripts } from './app-globals-8ed7a1ea.js';
+import { B as BUILD, c as consoleDevInfo, p as plt, w as win, H, d as doc, N as NAMESPACE, a as promiseResolve, b as bootstrapLazy } from './index-931f4a75.js';
+import { g as globalScripts } from './app-globals-f812d7a7.js';
 
 /*
  Stencil Client Patch Browser v2.12.1 | MIT Licensed | https://stenciljs.com
@@ -121,5 +121,5 @@ const patchCloneNodeFix = (HTMLElementPrototype) => {
 
 patchBrowser().then(options => {
   globalScripts();
-  return bootstrapLazy([["app-home",[[0,"app-home"]]],["app-profile",[[1,"app-profile",{"match":[16]}]]],["app-root",[[1,"app-root"]]],["my-child",[[1,"my-child"]]],["my-component",[[1,"my-component",{"first":[1],"middle":[1],"last":[1]}]]]], options);
+  return bootstrapLazy([["__prefix__-component",[[1,"__prefix__-component",{"first":[1],"middle":[1],"last":[1]}]]],["app-home",[[0,"app-home"]]],["app-profile",[[1,"app-profile",{"match":[16]}]]],["app-root",[[1,"app-root"]]],["__prefix__-child",[[1,"__prefix__-child"]]]], options);
 });

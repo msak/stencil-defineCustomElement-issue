@@ -9,13 +9,13 @@
 
 ### Used by
 
- - [my-component](../my-component)
+ - [__prefix__-component](../my-component)
 
 ### Graph
 ```mermaid
 graph TD;
-  my-component --> my-child
-  style my-child fill:#f9f,stroke:#333,stroke-width:4px
+  __prefix__-component --> __prefix__-child
+  style __prefix__-child fill:#f9f,stroke:#333,stroke-width:4px
 ```
 
 ----------------------------------------------

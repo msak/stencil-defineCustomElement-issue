@@ -1,4 +1,4 @@
-import { r as registerInstance, h, e as Host } from './index-7a25307b.js';
+import { r as registerInstance, h, e as Host } from './index-931f4a75.js';
 
 const myChildCss = ":host{display:block}";
 
@@ -12,4 +12,4 @@ let MyChild = class {
 };
 MyChild.style = myChildCss;
 
-export { MyChild as my_child };
+export { MyChild as __prefix___child };
