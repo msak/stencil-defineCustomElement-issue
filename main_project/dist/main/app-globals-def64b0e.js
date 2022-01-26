@@ -1,6 +1,6 @@
-import { E as Env } from './index-575de03d.js';
+import { E as Env } from './index-9d0a929f.js';
 
-document.querySelector('script[data-stencil-namespace=main]')['data-opts'] = {
+document.querySelector(`script[data-stencil-namespace=${Env['namespace']}]`)['data-opts'] = {
   transformTagName: (tagName) => tagName.lastIndexOf('__prefix__') === 0 ? tagName.replace('__prefix__', Env['prefix']) : tagName
 };
 const libGlobalScript = async () => {

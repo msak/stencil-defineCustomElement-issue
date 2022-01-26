@@ -1,6 +1,6 @@
 import {Env} from '@stencil/core';
 
-document.querySelector('script[data-stencil-namespace=main]')['data-opts'] = {
+document.querySelector(`script[data-stencil-namespace=${Env['namespace']}]`)['data-opts'] = {
   transformTagName : (tagName) => tagName.lastIndexOf('__prefix__') === 0 ? tagName.replace('__prefix__', Env['prefix']) : tagName
 };
 

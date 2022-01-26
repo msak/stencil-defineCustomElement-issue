@@ -2,13 +2,15 @@ import { Config } from '@stencil/core';
 
 // https://stenciljs.com/docs/config
 
+const ns = 'main';
 export const config: Config = {
-  namespace: 'main',
+  namespace: ns,
   globalStyle: 'src/global/app.css',
   globalScript: 'src/global/app.ts',
   taskQueue: 'async',
   env: {
-    prefix: 'wmlist'
+    prefix: 'wmlist',
+    namespace: ns,
   },
   extras: {
     tagNameTransform: true,
