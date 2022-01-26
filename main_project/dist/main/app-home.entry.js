@@ -7,7 +7,7 @@ let AppHome = class {
     registerInstance(this, hostRef);
   }
   render() {
-    return (h(Host, null, h("my-component", { first: "MY-COMPONENT" }, "\uD83D\uDC7B"), h("wmlist-component", { first: "PREFIX-MY-COMPONENT" }, "\uD83E\uDD13")));
+    return (h(Host, null, h("__prefix__-component", { first: "MY-COMPONENT" }, "\uD83D\uDC7B"), h("wmlist-component", { first: "PREFIX-MY-COMPONENT" }, "\uD83E\uDD13")));
   }
 };
 AppHome.style = appHomeCss;

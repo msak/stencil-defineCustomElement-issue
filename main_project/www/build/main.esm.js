@@ -121,5 +121,5 @@ const patchCloneNodeFix = (HTMLElementPrototype) => {
 
 patchBrowser().then(options => {
   globalScripts();
-  return bootstrapLazy([["__prefix__-component",[[1,"__prefix__-component",{"first":[1],"middle":[1],"last":[1]}]]],["app-home",[[0,"app-home"]]],["app-profile",[[1,"app-profile",{"match":[16]}]]],["app-root",[[1,"app-root"]]],["__prefix__-child",[[1,"__prefix__-child"]]]], options);
+  return bootstrapLazy([["app-home",[[0,"app-home"]]],["app-profile",[[1,"app-profile",{"match":[16]}]]],["app-root",[[1,"app-root"]]],["__prefix__-child",[[1,"__prefix__-child"]]],["__prefix__-component",[[1,"__prefix__-component",{"first":[1],"middle":[1],"last":[1]}]]]], options);
 });

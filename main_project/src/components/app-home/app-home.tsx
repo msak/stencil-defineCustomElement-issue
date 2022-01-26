@@ -8,7 +8,7 @@ export class AppHome {
   render() {
     return (
       <Host>
-        <my-component first="MY-COMPONENT">👻</my-component>
+        <__prefix__-component first="MY-COMPONENT">👻</__prefix__-component>
         <wmlist-component first="PREFIX-MY-COMPONENT">🤓</wmlist-component>
       </Host>
     );
