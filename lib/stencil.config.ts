@@ -3,6 +3,7 @@ import { Config } from "@stencil/core/internal";
 
 export const config: Config = {
   namespace: 'lib',
+  globalScript: 'src/global/lib.ts',
   extras: {
     tagNameTransform: true,
   },
