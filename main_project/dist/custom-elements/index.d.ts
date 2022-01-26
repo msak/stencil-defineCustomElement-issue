@@ -1,6 +1,6 @@
 /* main custom elements bundle */
 
-import type { Components, JSX } from "../types/components";
+import type { Components, JSX } from "../types/lib-components";
 
 interface AppHome extends Components.AppHome, HTMLElement {}
 export const AppHome: {
