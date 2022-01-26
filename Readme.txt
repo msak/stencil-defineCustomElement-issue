@@ -46,3 +46,22 @@ Issues:
   Error message: TypeError: Failed to fetch dynamically imported module: http://localhost:3333/build/my-child_2.entry.js undefined
   Reproduction: allways on start of main_project
   Mitigation: none
+
+
+-----
+
+State: good
+Titel: Mitigation via data-opt
+Prepare Lib:
+* use custom JSX Factory function h() instead of method of stencil/core
+* prefix name of all lib components with '__prefix__'; e.g. '__prefix__-component'
+* set data-opt property on corresponding script element on global script, see ./lib/src/global/lib.ts
+* set stencil.config property extras.tagNameTransform = true
+
+Prepare Main Project:
+* activate data-opt via extras.scriptDataOpts: true inside stencil.config
+* activate tag name transformation via extras.tagNameTransform: true inside stencil.config
+* define a proper prefix for all lib components (__prefix__ will be replaced by) env.prefix: 'xxxx' inside stencil.config
+* mirror the namespace of the main project by setting env.namespace: 'main' inside stencil.config
+* set attribute on main project script data-stencil-namespace and mirror the namespace as value; e.g. data-stencil-namespace="main" 
+* (optional) extend JSX.IntrinsicElements interface with your transformed component tags and import definition file on index.ts; see ./main_project/src/lib-components.d.ts
