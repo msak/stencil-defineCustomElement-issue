@@ -1,4 +1,4 @@
-import { E as Env } from './index-3ef34d12.js';
+import { E as Env } from './index-575de03d.js';
 
 document.querySelector('script[data-stencil-namespace=main]')['data-opts'] = {
   transformTagName: (tagName) => tagName.lastIndexOf('__prefix__') === 0 ? tagName.replace('__prefix__', Env['prefix']) : tagName
