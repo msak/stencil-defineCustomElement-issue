@@ -7,7 +7,7 @@ let AppHome = class {
     registerInstance(this, hostRef);
   }
   render() {
-    return (h(Host, null, h("__prefix__-component", { first: "MY-COMPONENT" }, "\uD83D\uDC7B"), h("wmlist-component", { first: "PREFIX-MY-COMPONENT" }, "\uD83E\uDD13"), h("stencil-route-link", { url: "/profile/stencil" }, h("button", null, "Profile page"))));
+    return (h(Host, null, h("__prefix__-component", { first: "MY-COMPONENT" }, "\uD83D\uDC7B"), h("wmlist-my-component", { first: "PREFIX-MY-COMPONENT" }, "\uD83E\uDD13"), h("stencil-route-link", { url: "/profile/stencil" }, h("button", null, "Profile page"))));
   }
 };
 AppHome.style = appHomeCss;

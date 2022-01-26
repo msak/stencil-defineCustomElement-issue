@@ -1,7 +1,10 @@
 import { E as Env } from './index-9d0a929f.js';
 
+const libPrefix = 'my';
 document.querySelector(`script[data-stencil-namespace=${Env['namespace']}]`)['data-opts'] = {
-  transformTagName: (tagName) => tagName.lastIndexOf('__prefix__') === 0 ? tagName.replace('__prefix__', Env['prefix']) : tagName
+  transformTagName: (tagName) => {
+    return tagName.lastIndexOf(libPrefix + '-') === 0 ? `${Env['prefix']}-${tagName}` : tagName;
+  }
 };
 const libGlobalScript = async () => {
   /**

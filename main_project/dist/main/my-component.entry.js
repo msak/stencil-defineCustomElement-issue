@@ -4,6 +4,7 @@ function format(first, middle, last) {
   return (first || '') + (middle ? ` ${middle}` : '') + (last ? ` ${last}` : '');
 }
 
+const libPrefix = 'my';
 // import { plt }  from '@stencil/core/internal/client';
 // create a shadow function for h() which replaces all child elements of given namesapce prefix defined in stencil.config.ts
 // import this h() instead of stencil/core's
@@ -12,9 +13,9 @@ function h(...args) {
   if (
   // plt.replaceNSPrefix && 
   typeof (args[0]) === 'string' &&
-    args[0].indexOf('__prefix__-') > -1) {
-    // args[0] = `${plt.replaceNSPrefix}-${args[0]}`;
-    args[0] = args[0].replace('__prefix__', Env['prefix']);
+    args[0].lastIndexOf(libPrefix + '-') === 0) {
+    args[0] = `${Env['prefix']}-${args[0]}`;
+    // args[0] = args[0].replace('__prefix__', Env['prefix']);
   }
   switch (args.length) {
     case 1:
@@ -38,9 +39,9 @@ let MyComponent = class {
     return format(this.first, this.middle, this.last);
   }
   render() {
-    return h("div", null, "Hello, World! I'm ", this.getText(), h("span", null, h("slot", null)), h("__prefix__-child", null));
+    return h("div", null, "Hello, World! I'm ", this.getText(), h("span", null, h("slot", null)), h("my-child", null));
   }
 };
 MyComponent.style = myComponentCss;
 
-export { MyComponent as __prefix___component };
+export { MyComponent as my_component };

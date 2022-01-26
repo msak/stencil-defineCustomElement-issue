@@ -1,4 +1,5 @@
 import {  Env, h as horigin} from '@stencil/core';
+const libPrefix = 'my';
 // import { plt }  from '@stencil/core/internal/client';
 
 // create a shadow function for h() which replaces all child elements of given namesapce prefix defined in stencil.config.ts
@@ -8,10 +9,10 @@ export function h(...args: any[]) {
   if (
       // plt.replaceNSPrefix && 
       typeof(args[0]) === 'string' && 
-      args[0].indexOf('__prefix__-') > -1
+      args[0].lastIndexOf(libPrefix+'-') === 0
   ) {
-    // args[0] = `${plt.replaceNSPrefix}-${args[0]}`;
-    args[0] = args[0].replace('__prefix__', Env['prefix']);
+    args[0] = `${Env['prefix']}-${args[0]}`;
+    // args[0] = args[0].replace('__prefix__', Env['prefix']);
   }
 
 

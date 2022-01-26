@@ -9,7 +9,7 @@ export class AppHome {
     return (
       <Host>
         <__prefix__-component first="MY-COMPONENT">👻</__prefix__-component>
-        <wmlist-component first="PREFIX-MY-COMPONENT">🤓</wmlist-component>
+        <wmlist-my-component first="PREFIX-MY-COMPONENT">🤓</wmlist-my-component>
 
         <stencil-route-link url="/profile/stencil">
           <button>Profile page</button>

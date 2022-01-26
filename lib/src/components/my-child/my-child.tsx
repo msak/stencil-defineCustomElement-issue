@@ -1,7 +1,7 @@
 import { Component, Host, h } from '@stencil/core';
 
 @Component({
-  tag: '__prefix__-child',
+  tag: 'my-child',
   styleUrl: 'my-child.css',
   shadow: true,
 })

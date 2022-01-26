@@ -12,4 +12,4 @@ let MyChild = class {
 };
 MyChild.style = myChildCss;
 
-export { MyChild as __prefix___child };
+export { MyChild as my_child };
