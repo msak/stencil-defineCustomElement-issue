@@ -6,3 +6,5 @@ import './location-utils-fea12957.js';
 function injectHistory(Component) {
     ActiveRouter.injectProps(Component, ['history', 'location']);
 }
+
+// import './lib-components';

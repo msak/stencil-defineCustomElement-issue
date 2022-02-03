@@ -13,18 +13,18 @@ export const config: Config = {
     namespace: ns,
   },
   extras: {
-    tagNameTransform: true,
-    scriptDataOpts: true,
+    // tagNameTransform: true,
+    // scriptDataOpts: true,
   },
   outputTargets: [
-    {
-      type: 'dist',
-      esmLoaderPath: '../loader',
-    },
-    {
-      type: 'dist-custom-elements-bundle',
-      dir: 'dist/custom-elements',
-    },
+    // {
+    //   type: 'dist',
+    //   // esmLoaderPath: '../loader',
+    // },
+    // {
+    //   type: 'dist-custom-elements-bundle',
+    //   dir: 'dist/custom-elements',
+    // },
     {
       type: 'www',
       // comment the following line to disable service workers in production

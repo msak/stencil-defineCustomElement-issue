@@ -19,7 +19,8 @@
     "typescript": "4.4.4"
   },
   "dependencies": {
-    "lib": "1.0.0"
+    "lib": "1.0.0",
+    "api": "1.0.0"
   },
   "license": "MIT"
 }

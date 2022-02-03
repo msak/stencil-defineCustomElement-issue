@@ -2,8 +2,12 @@ import { Component, Prop} from '@stencil/core';
 import { format } from '../../utils/utils';
 import { h } from '../../jsxFactory';
 
+import {getMessage} from 'api';
+
+
+
 @Component({
-  tag: '__prefix__-component',
+  tag: 'my-component',
   styleUrl: 'my-component.css',
   shadow: true,
 })
@@ -23,11 +27,18 @@ export class MyComponent {
    */
   @Prop() last: string;
 
+  protected componentWillRender() {
+    debugger;
+
+    console.log('##########', getMessage());
+
+  }
+
   private getText(): string {
     return format(this.first, this.middle, this.last);
   }
 
   render() {
-    return <div>Hello, World! I'm {this.getText()}<span><slot /></span><__prefix__-child></__prefix__-child></div>;
+    return <div>Hello, World! I'm {this.getText()}<span><slot /></span><my-child></my-child></div>;
   }
 }

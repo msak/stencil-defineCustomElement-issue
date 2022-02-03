@@ -6,9 +6,9 @@
  */
 import { HTMLStencilElement, JSXBase } from "@stencil/core/internal";
 export namespace Components {
-    interface __prefix__Child {
+    interface MyChild {
     }
-    interface __prefix__Component {
+    interface MyComponent {
         /**
           * The first name
          */
@@ -24,27 +24,27 @@ export namespace Components {
     }
 }
 declare global {
-    interface HTML__prefix__ChildElement extends Components.__prefix__Child, HTMLStencilElement {
+    interface HTMLMyChildElement extends Components.MyChild, HTMLStencilElement {
     }
-    var HTML__prefix__ChildElement: {
-        prototype: HTML__prefix__ChildElement;
-        new (): HTML__prefix__ChildElement;
+    var HTMLMyChildElement: {
+        prototype: HTMLMyChildElement;
+        new (): HTMLMyChildElement;
     };
-    interface HTML__prefix__ComponentElement extends Components.__prefix__Component, HTMLStencilElement {
+    interface HTMLMyComponentElement extends Components.MyComponent, HTMLStencilElement {
     }
-    var HTML__prefix__ComponentElement: {
-        prototype: HTML__prefix__ComponentElement;
-        new (): HTML__prefix__ComponentElement;
+    var HTMLMyComponentElement: {
+        prototype: HTMLMyComponentElement;
+        new (): HTMLMyComponentElement;
     };
     interface HTMLElementTagNameMap {
-        "__prefix__-child": HTML__prefix__ChildElement;
-        "__prefix__-component": HTML__prefix__ComponentElement;
+        "my-child": HTMLMyChildElement;
+        "my-component": HTMLMyComponentElement;
     }
 }
 declare namespace LocalJSX {
-    interface __prefix__Child {
+    interface MyChild {
     }
-    interface __prefix__Component {
+    interface MyComponent {
         /**
           * The first name
          */
@@ -59,16 +59,16 @@ declare namespace LocalJSX {
         "middle"?: string;
     }
     interface IntrinsicElements {
-        "__prefix__-child": __prefix__Child;
-        "__prefix__-component": __prefix__Component;
+        "my-child": MyChild;
+        "my-component": MyComponent;
     }
 }
 export { LocalJSX as JSX };
 declare module "@stencil/core" {
     export namespace JSX {
         interface IntrinsicElements {
-            "__prefix__-child": LocalJSX.__prefix__Child & JSXBase.HTMLAttributes<HTML__prefix__ChildElement>;
-            "__prefix__-component": LocalJSX.__prefix__Component & JSXBase.HTMLAttributes<HTML__prefix__ComponentElement>;
+            "my-child": LocalJSX.MyChild & JSXBase.HTMLAttributes<HTMLMyChildElement>;
+            "my-component": LocalJSX.MyComponent & JSXBase.HTMLAttributes<HTMLMyComponentElement>;
         }
     }
 }

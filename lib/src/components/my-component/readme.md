@@ -18,13 +18,13 @@
 
 ### Depends on
 
-- [__prefix__-child](../my-child)
+- [my-child](../my-child)
 
 ### Graph
 ```mermaid
 graph TD;
-  __prefix__-component --> __prefix__-child
-  style __prefix__-component fill:#f9f,stroke:#333,stroke-width:4px
+  my-component --> my-child
+  style my-component fill:#f9f,stroke:#333,stroke-width:4px
 ```
 
 ----------------------------------------------
