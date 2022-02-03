@@ -1,0 +1,19 @@
+{
+  "name": "@webmailer/experimentals.custom-elements",
+  "version": "0.0.1",
+  "description": "Utility function to create Stencil custom elements.",
+  "module": "build/index",
+  "main": "build/index",
+  "scripts": {
+    "build": "tsc",
+    "link": "yalc publish --push --replace"
+  },
+  "author": "Mustafa Sak",
+  "dependencies": {
+    "@stencil/core": "^2.0.1"
+  },
+  "devDependencies": {
+    "typescript": "4.2.3"
+  },
+  "license": "ISC"
+}

@@ -1,7 +1,15 @@
 import {setMessage} from 'api';
 
-debugger;
+import {setPlatformOptions} from'lib/dist/components';
+import {MyComponent} from'lib/dist/components/my-component'; 
+import {MyChild} from'lib/dist/components/my-child'; 
+
+import {defineCustomElements} from '@webmailer/experimentals.custom-elements';
+
+
 setMessage('SAK');
+
+defineCustomElements(setPlatformOptions, [MyComponent, MyChild], 'wmlist');
 
 export default async () => {
 

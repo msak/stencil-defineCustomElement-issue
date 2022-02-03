@@ -1,6 +1,6 @@
 import { Component, Prop} from '@stencil/core';
 import { format } from '../../utils/utils';
-import { h } from '../../jsxFactory';
+import { h } from '@webmailer/experimentals.custom-elements';
 
 import {getMessage} from 'api';
 
@@ -28,8 +28,6 @@ export class MyComponent {
   @Prop() last: string;
 
   protected componentWillRender() {
-    debugger;
-
     console.log('##########', getMessage());
 
   }

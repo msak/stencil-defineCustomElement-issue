@@ -1,6 +1,823 @@
-const NAMESPACE = 'main';
-const BUILD = /* main */ { allRenderFn: false, appendChildSlotFix: false, asyncLoading: true, asyncQueue: false, attachStyles: true, cloneNodeFix: false, cmpDidLoad: true, cmpDidRender: false, cmpDidUnload: true, cmpDidUpdate: true, cmpShouldUpdate: false, cmpWillLoad: true, cmpWillRender: false, cmpWillUpdate: false, connectedCallback: true, constructableCSS: false, cssAnnotations: true, cssVarShim: false, devTools: true, disconnectedCallback: true, dynamicImportShim: false, element: false, event: false, hasRenderFn: true, hostListener: false, hostListenerTarget: false, hostListenerTargetBody: false, hostListenerTargetDocument: false, hostListenerTargetParent: false, hostListenerTargetWindow: false, hotModuleReplacement: true, hydrateClientSide: false, hydrateServerSide: false, hydratedAttribute: false, hydratedClass: true, initializeNextTick: false, invisiblePrehydration: true, isDebug: false, isDev: true, isTesting: false, lazyLoad: true, lifecycle: true, lifecycleDOMEvents: false, member: true, method: false, mode: false, observeAttribute: true, profile: true, prop: true, propBoolean: true, propMutable: true, propNumber: true, propString: true, reflect: true, safari10: false, scoped: false, scopedSlotTextContentFix: false, scriptDataOpts: false, shadowDelegatesFocus: false, shadowDom: true, shadowDomShim: false, slot: true, slotChildNodesFix: false, slotRelocation: true, state: true, style: true, svg: false, taskQueue: true, transformTagName: false, updatable: true, vdomAttribute: true, vdomClass: true, vdomFunctional: true, vdomKey: true, vdomListener: true, vdomPropOrAttr: true, vdomRef: true, vdomRender: true, vdomStyle: true, vdomText: true, vdomXlink: true, watchCallback: true };
-const Env = /* main */ {"prefix":"wmlist","namespace":"main"};
+import { B as BUILD, N as NAMESPACE$1, E as Env, h as h$3 } from './index-76361fa5.js';
+
+let message = 'default';
+
+function setMessage(msg) {
+  message = msg;
+}
+
+
+function getMessage() {
+  return message;
+}
+
+const NAMESPACE = 'lib';
+
+let scopeId$1;
+let hostTagName$1;
+let queuePending$1 = false;
+const win$1 = typeof window !== 'undefined' ? window : {};
+const doc$1 = win$1.document || { head: {} };
+const H$1 = (win$1.HTMLElement || class {
+});
+const plt$1 = {
+    $flags$: 0,
+    $resourcesUrl$: '',
+    jmp: (h) => h(),
+    raf: (h) => requestAnimationFrame(h),
+    ael: (el, eventName, listener, opts) => el.addEventListener(eventName, listener, opts),
+    rel: (el, eventName, listener, opts) => el.removeEventListener(eventName, listener, opts),
+    ce: (eventName, opts) => new CustomEvent(eventName, opts),
+};
+const promiseResolve$1 = (v) => Promise.resolve(v);
+const supportsConstructibleStylesheets$1 = /*@__PURE__*/ (() => {
+        try {
+            new CSSStyleSheet();
+            return typeof new CSSStyleSheet().replace === 'function';
+        }
+        catch (e) { }
+        return false;
+    })()
+    ;
+const createTime$1 = (fnName, tagName = '') => {
+    {
+        return () => {
+            return;
+        };
+    }
+};
+const rootAppliedStyles$1 = new WeakMap();
+const registerStyle$1 = (scopeId, cssText, allowCS) => {
+    let style = styles$1.get(scopeId);
+    if (supportsConstructibleStylesheets$1 && allowCS) {
+        style = (style || new CSSStyleSheet());
+        style.replace(cssText);
+    }
+    else {
+        style = cssText;
+    }
+    styles$1.set(scopeId, style);
+};
+const addStyle$1 = (styleContainerNode, cmpMeta, mode, hostElm) => {
+    let scopeId = getScopeId$1(cmpMeta);
+    let style = styles$1.get(scopeId);
+    // if an element is NOT connected then getRootNode() will return the wrong root node
+    // so the fallback is to always use the document for the root node in those cases
+    styleContainerNode = styleContainerNode.nodeType === 11 /* DocumentFragment */ ? styleContainerNode : doc$1;
+    if (style) {
+        if (typeof style === 'string') {
+            styleContainerNode = styleContainerNode.head || styleContainerNode;
+            let appliedStyles = rootAppliedStyles$1.get(styleContainerNode);
+            let styleElm;
+            if (!appliedStyles) {
+                rootAppliedStyles$1.set(styleContainerNode, (appliedStyles = new Set()));
+            }
+            if (!appliedStyles.has(scopeId)) {
+                {
+                    {
+                        styleElm = doc$1.createElement('style');
+                        styleElm.innerHTML = style;
+                    }
+                    styleContainerNode.insertBefore(styleElm, styleContainerNode.querySelector('link'));
+                }
+                if (appliedStyles) {
+                    appliedStyles.add(scopeId);
+                }
+            }
+        }
+        else if (!styleContainerNode.adoptedStyleSheets.includes(style)) {
+            styleContainerNode.adoptedStyleSheets = [...styleContainerNode.adoptedStyleSheets, style];
+        }
+    }
+    return scopeId;
+};
+const attachStyles$1 = (hostRef) => {
+    const cmpMeta = hostRef.$cmpMeta$;
+    const elm = hostRef.$hostElement$;
+    const flags = cmpMeta.$flags$;
+    const endAttachStyles = createTime$1('attachStyles', cmpMeta.$tagName$);
+    const scopeId = addStyle$1(elm.shadowRoot ? elm.shadowRoot : elm.getRootNode(), cmpMeta);
+    if (flags & 10 /* needsScopedEncapsulation */) {
+        // only required when we're NOT using native shadow dom (slot)
+        // or this browser doesn't support native shadow dom
+        // and this host element was NOT created with SSR
+        // let's pick out the inner content for slot projection
+        // create a node to represent where the original
+        // content was first placed, which is useful later on
+        // DOM WRITE!!
+        elm['s-sc'] = scopeId;
+        elm.classList.add(scopeId + '-h');
+    }
+    endAttachStyles();
+};
+const getScopeId$1 = (cmp, mode) => 'sc-' + (cmp.$tagName$);
+const isDef$1 = (v) => v != null;
+const isComplexType$1 = (o) => {
+    // https://jsperf.com/typeof-fn-object/5
+    o = typeof o;
+    return o === 'object' || o === 'function';
+};
+/**
+ * Production h() function based on Preact by
+ * Jason Miller (@developit)
+ * Licensed under the MIT License
+ * https://github.com/developit/preact/blob/master/LICENSE
+ *
+ * Modified for Stencil's compiler and vdom
+ */
+// const stack: any[] = [];
+// export function h(nodeName: string | d.FunctionalComponent, vnodeData: d.PropsType, child?: d.ChildType): d.VNode;
+// export function h(nodeName: string | d.FunctionalComponent, vnodeData: d.PropsType, ...children: d.ChildType[]): d.VNode;
+const h$2 = (nodeName, vnodeData, ...children) => {
+    let child = null;
+    let simple = false;
+    let lastSimple = false;
+    let vNodeChildren = [];
+    const walk = (c) => {
+        for (let i = 0; i < c.length; i++) {
+            child = c[i];
+            if (Array.isArray(child)) {
+                walk(child);
+            }
+            else if (child != null && typeof child !== 'boolean') {
+                if ((simple = typeof nodeName !== 'function' && !isComplexType$1(child))) {
+                    child = String(child);
+                }
+                if (simple && lastSimple) {
+                    // If the previous child was simple (string), we merge both
+                    vNodeChildren[vNodeChildren.length - 1].$text$ += child;
+                }
+                else {
+                    // Append a new vNode, if it's text, we create a text vNode
+                    vNodeChildren.push(simple ? newVNode$1(null, child) : child);
+                }
+                lastSimple = simple;
+            }
+        }
+    };
+    walk(children);
+    const vnode = newVNode$1(nodeName, null);
+    vnode.$attrs$ = vnodeData;
+    if (vNodeChildren.length > 0) {
+        vnode.$children$ = vNodeChildren;
+    }
+    return vnode;
+};
+const newVNode$1 = (tag, text) => {
+    const vnode = {
+        $flags$: 0,
+        $tag$: tag,
+        $text$: text,
+        $elm$: null,
+        $children$: null,
+    };
+    return vnode;
+};
+const Host$1 = {};
+const isHost$1 = (node) => node && node.$tag$ === Host$1;
+const createElm$1 = (oldParentVNode, newParentVNode, childIndex, parentElm) => {
+    // tslint:disable-next-line: prefer-const
+    let newVNode = newParentVNode.$children$[childIndex];
+    let i = 0;
+    let elm;
+    let childNode;
+    if (newVNode.$text$ !== null) {
+        // create text node
+        elm = newVNode.$elm$ = doc$1.createTextNode(newVNode.$text$);
+    }
+    else {
+        // create element
+        elm = newVNode.$elm$ = (doc$1.createElement(newVNode.$tag$));
+        if (isDef$1(scopeId$1) && elm['s-si'] !== scopeId$1) {
+            // if there is a scopeId and this is the initial render
+            // then let's add the scopeId as a css class
+            elm.classList.add((elm['s-si'] = scopeId$1));
+        }
+        if (newVNode.$children$) {
+            for (i = 0; i < newVNode.$children$.length; ++i) {
+                // create the node
+                childNode = createElm$1(oldParentVNode, newVNode, i);
+                // return node could have been null
+                if (childNode) {
+                    // append our new node
+                    elm.appendChild(childNode);
+                }
+            }
+        }
+    }
+    return elm;
+};
+const addVnodes$1 = (parentElm, before, parentVNode, vnodes, startIdx, endIdx) => {
+    let containerElm = (parentElm);
+    let childNode;
+    if (containerElm.shadowRoot && containerElm.tagName === hostTagName$1) {
+        containerElm = containerElm.shadowRoot;
+    }
+    for (; startIdx <= endIdx; ++startIdx) {
+        if (vnodes[startIdx]) {
+            childNode = createElm$1(null, parentVNode, startIdx);
+            if (childNode) {
+                vnodes[startIdx].$elm$ = childNode;
+                containerElm.insertBefore(childNode, before);
+            }
+        }
+    }
+};
+const removeVnodes$1 = (vnodes, startIdx, endIdx, vnode, elm) => {
+    for (; startIdx <= endIdx; ++startIdx) {
+        if ((vnode = vnodes[startIdx])) {
+            elm = vnode.$elm$;
+            // remove the vnode's element from the dom
+            elm.remove();
+        }
+    }
+};
+const updateChildren$1 = (parentElm, oldCh, newVNode, newCh) => {
+    let oldStartIdx = 0;
+    let newStartIdx = 0;
+    let oldEndIdx = oldCh.length - 1;
+    let oldStartVnode = oldCh[0];
+    let oldEndVnode = oldCh[oldEndIdx];
+    let newEndIdx = newCh.length - 1;
+    let newStartVnode = newCh[0];
+    let newEndVnode = newCh[newEndIdx];
+    let node;
+    while (oldStartIdx <= oldEndIdx && newStartIdx <= newEndIdx) {
+        if (oldStartVnode == null) {
+            // Vnode might have been moved left
+            oldStartVnode = oldCh[++oldStartIdx];
+        }
+        else if (oldEndVnode == null) {
+            oldEndVnode = oldCh[--oldEndIdx];
+        }
+        else if (newStartVnode == null) {
+            newStartVnode = newCh[++newStartIdx];
+        }
+        else if (newEndVnode == null) {
+            newEndVnode = newCh[--newEndIdx];
+        }
+        else if (isSameVnode$1(oldStartVnode, newStartVnode)) {
+            patch$1(oldStartVnode, newStartVnode);
+            oldStartVnode = oldCh[++oldStartIdx];
+            newStartVnode = newCh[++newStartIdx];
+        }
+        else if (isSameVnode$1(oldEndVnode, newEndVnode)) {
+            patch$1(oldEndVnode, newEndVnode);
+            oldEndVnode = oldCh[--oldEndIdx];
+            newEndVnode = newCh[--newEndIdx];
+        }
+        else if (isSameVnode$1(oldStartVnode, newEndVnode)) {
+            patch$1(oldStartVnode, newEndVnode);
+            parentElm.insertBefore(oldStartVnode.$elm$, oldEndVnode.$elm$.nextSibling);
+            oldStartVnode = oldCh[++oldStartIdx];
+            newEndVnode = newCh[--newEndIdx];
+        }
+        else if (isSameVnode$1(oldEndVnode, newStartVnode)) {
+            patch$1(oldEndVnode, newStartVnode);
+            parentElm.insertBefore(oldEndVnode.$elm$, oldStartVnode.$elm$);
+            oldEndVnode = oldCh[--oldEndIdx];
+            newStartVnode = newCh[++newStartIdx];
+        }
+        else {
+            {
+                // new element
+                node = createElm$1(oldCh && oldCh[newStartIdx], newVNode, newStartIdx);
+                newStartVnode = newCh[++newStartIdx];
+            }
+            if (node) {
+                {
+                    oldStartVnode.$elm$.parentNode.insertBefore(node, oldStartVnode.$elm$);
+                }
+            }
+        }
+    }
+    if (oldStartIdx > oldEndIdx) {
+        addVnodes$1(parentElm, newCh[newEndIdx + 1] == null ? null : newCh[newEndIdx + 1].$elm$, newVNode, newCh, newStartIdx, newEndIdx);
+    }
+    else if (newStartIdx > newEndIdx) {
+        removeVnodes$1(oldCh, oldStartIdx, oldEndIdx);
+    }
+};
+const isSameVnode$1 = (vnode1, vnode2) => {
+    // compare if two vnode to see if they're "technically" the same
+    // need to have the same element tag, and same key to be the same
+    if (vnode1.$tag$ === vnode2.$tag$) {
+        return true;
+    }
+    return false;
+};
+const patch$1 = (oldVNode, newVNode) => {
+    const elm = (newVNode.$elm$ = oldVNode.$elm$);
+    const oldChildren = oldVNode.$children$;
+    const newChildren = newVNode.$children$;
+    const text = newVNode.$text$;
+    if (text === null) {
+        if (oldChildren !== null && newChildren !== null) {
+            // looks like there's child vnodes for both the old and new vnodes
+            updateChildren$1(elm, oldChildren, newVNode, newChildren);
+        }
+        else if (newChildren !== null) {
+            // no old child vnodes, but there are new child vnodes to add
+            if (oldVNode.$text$ !== null) {
+                // the old vnode was text, so be sure to clear it out
+                elm.textContent = '';
+            }
+            // add the new vnode children
+            addVnodes$1(elm, null, newVNode, newChildren, 0, newChildren.length - 1);
+        }
+        else if (oldChildren !== null) {
+            // no new child vnodes, but there are old child vnodes to remove
+            removeVnodes$1(oldChildren, 0, oldChildren.length - 1);
+        }
+    }
+    else if (oldVNode.$text$ !== text) {
+        // update the text content for the text only vnode
+        // and also only if the text is different than before
+        elm.data = text;
+    }
+};
+const renderVdom$1 = (hostRef, renderFnResults) => {
+    const hostElm = hostRef.$hostElement$;
+    const oldVNode = hostRef.$vnode$ || newVNode$1(null, null);
+    const rootVnode = isHost$1(renderFnResults) ? renderFnResults : h$2(null, null, renderFnResults);
+    hostTagName$1 = hostElm.tagName;
+    rootVnode.$tag$ = null;
+    rootVnode.$flags$ |= 4 /* isHost */;
+    hostRef.$vnode$ = rootVnode;
+    rootVnode.$elm$ = oldVNode.$elm$ = (hostElm.shadowRoot || hostElm );
+    {
+        scopeId$1 = hostElm['s-sc'];
+    }
+    // synchronous patch
+    patch$1(oldVNode, rootVnode);
+};
+/**
+ * Helper function to create & dispatch a custom Event on a provided target
+ * @param elm the target of the Event
+ * @param name the name to give the custom Event
+ * @param opts options for configuring a custom Event
+ * @returns the custom Event
+ */
+const emitEvent$1 = (elm, name, opts) => {
+    const ev = plt$1.ce(name, opts);
+    elm.dispatchEvent(ev);
+    return ev;
+};
+const attachToAncestor$1 = (hostRef, ancestorComponent) => {
+    if (ancestorComponent && !hostRef.$onRenderResolve$ && ancestorComponent['s-p']) {
+        ancestorComponent['s-p'].push(new Promise((r) => (hostRef.$onRenderResolve$ = r)));
+    }
+};
+const scheduleUpdate$1 = (hostRef, isInitialLoad) => {
+    {
+        hostRef.$flags$ |= 16 /* isQueuedForUpdate */;
+    }
+    if (hostRef.$flags$ & 4 /* isWaitingForChildren */) {
+        hostRef.$flags$ |= 512 /* needsRerender */;
+        return;
+    }
+    attachToAncestor$1(hostRef, hostRef.$ancestorComponent$);
+    // there is no ancestor component or the ancestor component
+    // has already fired off its lifecycle update then
+    // fire off the initial update
+    const dispatch = () => dispatchHooks$1(hostRef, isInitialLoad);
+    return writeTask$1(dispatch) ;
+};
+const dispatchHooks$1 = (hostRef, isInitialLoad) => {
+    const elm = hostRef.$hostElement$;
+    const endSchedule = createTime$1('scheduleUpdate', hostRef.$cmpMeta$.$tagName$);
+    const instance = elm;
+    let promise;
+    {
+        promise = then$1(promise, () => safeCall$1(instance, 'componentWillRender'));
+    }
+    endSchedule();
+    return then$1(promise, () => updateComponent$1(hostRef, instance, isInitialLoad));
+};
+const updateComponent$1 = async (hostRef, instance, isInitialLoad) => {
+    // updateComponent
+    const elm = hostRef.$hostElement$;
+    const endUpdate = createTime$1('update', hostRef.$cmpMeta$.$tagName$);
+    const rc = elm['s-rc'];
+    if (isInitialLoad) {
+        // DOM WRITE!
+        attachStyles$1(hostRef);
+    }
+    const endRender = createTime$1('render', hostRef.$cmpMeta$.$tagName$);
+    {
+        callRender$1(hostRef, instance);
+    }
+    if (rc) {
+        // ok, so turns out there are some child host elements
+        // waiting on this parent element to load
+        // let's fire off all update callbacks waiting
+        rc.map((cb) => cb());
+        elm['s-rc'] = undefined;
+    }
+    endRender();
+    endUpdate();
+    {
+        const childrenPromises = elm['s-p'];
+        const postUpdate = () => postUpdateComponent$1(hostRef);
+        if (childrenPromises.length === 0) {
+            postUpdate();
+        }
+        else {
+            Promise.all(childrenPromises).then(postUpdate);
+            hostRef.$flags$ |= 4 /* isWaitingForChildren */;
+            childrenPromises.length = 0;
+        }
+    }
+};
+const callRender$1 = (hostRef, instance, elm) => {
+    try {
+        instance = instance.render() ;
+        {
+            hostRef.$flags$ &= ~16 /* isQueuedForUpdate */;
+        }
+        {
+            hostRef.$flags$ |= 2 /* hasRendered */;
+        }
+        {
+            {
+                // looks like we've got child nodes to render into this host element
+                // or we need to update the css class/attrs on the host element
+                // DOM WRITE!
+                {
+                    renderVdom$1(hostRef, instance);
+                }
+            }
+        }
+    }
+    catch (e) {
+        consoleError$1(e, hostRef.$hostElement$);
+    }
+    return null;
+};
+const postUpdateComponent$1 = (hostRef) => {
+    const tagName = hostRef.$cmpMeta$.$tagName$;
+    const elm = hostRef.$hostElement$;
+    const endPostUpdate = createTime$1('postUpdate', tagName);
+    const ancestorComponent = hostRef.$ancestorComponent$;
+    if (!(hostRef.$flags$ & 64 /* hasLoadedComponent */)) {
+        hostRef.$flags$ |= 64 /* hasLoadedComponent */;
+        {
+            // DOM WRITE!
+            addHydratedFlag$1(elm);
+        }
+        endPostUpdate();
+        {
+            hostRef.$onReadyResolve$(elm);
+            if (!ancestorComponent) {
+                appDidLoad$1();
+            }
+        }
+    }
+    else {
+        endPostUpdate();
+    }
+    // load events fire from bottom to top
+    // the deepest elements load first then bubbles up
+    {
+        if (hostRef.$onRenderResolve$) {
+            hostRef.$onRenderResolve$();
+            hostRef.$onRenderResolve$ = undefined;
+        }
+        if (hostRef.$flags$ & 512 /* needsRerender */) {
+            nextTick$1(() => scheduleUpdate$1(hostRef, false));
+        }
+        hostRef.$flags$ &= ~(4 /* isWaitingForChildren */ | 512 /* needsRerender */);
+    }
+    // ( •_•)
+    // ( •_•)>⌐■-■
+    // (⌐■_■)
+};
+const appDidLoad$1 = (who) => {
+    // on appload
+    // we have finish the first big initial render
+    {
+        addHydratedFlag$1(doc$1.documentElement);
+    }
+    nextTick$1(() => emitEvent$1(win$1, 'appload', { detail: { namespace: NAMESPACE } }));
+};
+const safeCall$1 = (instance, method, arg) => {
+    if (instance && instance[method]) {
+        try {
+            return instance[method](arg);
+        }
+        catch (e) {
+            consoleError$1(e);
+        }
+    }
+    return undefined;
+};
+const then$1 = (promise, thenFn) => {
+    return promise && promise.then ? promise.then(thenFn) : thenFn();
+};
+const addHydratedFlag$1 = (elm) => elm.classList.add('hydrated')
+    ;
+const parsePropertyValue$1 = (propValue, propType) => {
+    // ensure this value is of the correct prop type
+    if (propValue != null && !isComplexType$1(propValue)) {
+        if (propType & 1 /* String */) {
+            // could have been passed as a number or boolean
+            // but we still want it as a string
+            return String(propValue);
+        }
+        // redundant return here for better minification
+        return propValue;
+    }
+    // not sure exactly what type we want
+    // so no need to change to a different type
+    return propValue;
+};
+const getValue$1 = (ref, propName) => getHostRef$1(ref).$instanceValues$.get(propName);
+const setValue$1 = (ref, propName, newVal, cmpMeta) => {
+    // check our new property value against our internal value
+    const hostRef = getHostRef$1(ref);
+    const oldVal = hostRef.$instanceValues$.get(propName);
+    const flags = hostRef.$flags$;
+    newVal = parsePropertyValue$1(newVal, cmpMeta.$members$[propName][0]);
+    if (newVal !== oldVal) {
+        // gadzooks! the property's value has changed!!
+        // set our new value!
+        hostRef.$instanceValues$.set(propName, newVal);
+        {
+            if ((flags & (2 /* hasRendered */ | 16 /* isQueuedForUpdate */)) === 2 /* hasRendered */) {
+                // looks like this value actually changed, so we've got work to do!
+                // but only if we've already rendered, otherwise just chill out
+                // queue that we need to do an update, but don't worry about queuing
+                // up millions cuz this function ensures it only runs once
+                scheduleUpdate$1(hostRef, false);
+            }
+        }
+    }
+};
+const proxyComponent$1 = (Cstr, cmpMeta, flags) => {
+    if (cmpMeta.$members$) {
+        // It's better to have a const than two Object.entries()
+        const members = Object.entries(cmpMeta.$members$);
+        const prototype = Cstr.prototype;
+        members.map(([memberName, [memberFlags]]) => {
+            if ((memberFlags & 31 /* Prop */ ||
+                    (memberFlags & 32 /* State */))) {
+                // proxyComponent - prop
+                Object.defineProperty(prototype, memberName, {
+                    get() {
+                        // proxyComponent, get value
+                        return getValue$1(this, memberName);
+                    },
+                    set(newValue) {
+                        // proxyComponent, set value
+                        setValue$1(this, memberName, newValue, cmpMeta);
+                    },
+                    configurable: true,
+                    enumerable: true,
+                });
+            }
+        });
+        {
+            const attrNameToPropName = new Map();
+            prototype.attributeChangedCallback = function (attrName, _oldValue, newValue) {
+                plt$1.jmp(() => {
+                    const propName = attrNameToPropName.get(attrName);
+                    //  In a web component lifecycle the attributeChangedCallback runs prior to connectedCallback
+                    //  in the case where an attribute was set inline.
+                    //  ```html
+                    //    <my-component some-attribute="some-value"></my-component>
+                    //  ```
+                    //
+                    //  There is an edge case where a developer sets the attribute inline on a custom element and then
+                    //  programmatically changes it before it has been upgraded as shown below:
+                    //
+                    //  ```html
+                    //    <!-- this component has _not_ been upgraded yet -->
+                    //    <my-component id="test" some-attribute="some-value"></my-component>
+                    //    <script>
+                    //      // grab non-upgraded component
+                    //      el = document.querySelector("#test");
+                    //      el.someAttribute = "another-value";
+                    //      // upgrade component
+                    //      customElements.define('my-component', MyComponent);
+                    //    </script>
+                    //  ```
+                    //  In this case if we do not unshadow here and use the value of the shadowing property, attributeChangedCallback
+                    //  will be called with `newValue = "some-value"` and will set the shadowed property (this.someAttribute = "another-value")
+                    //  to the value that was set inline i.e. "some-value" from above example. When
+                    //  the connectedCallback attempts to unshadow it will use "some-value" as the initial value rather than "another-value"
+                    //
+                    //  The case where the attribute was NOT set inline but was not set programmatically shall be handled/unshadowed
+                    //  by connectedCallback as this attributeChangedCallback will not fire.
+                    //
+                    //  https://developers.google.com/web/fundamentals/web-components/best-practices#lazy-properties
+                    //
+                    //  TODO(STENCIL-16) we should think about whether or not we actually want to be reflecting the attributes to
+                    //  properties here given that this goes against best practices outlined here
+                    //  https://developers.google.com/web/fundamentals/web-components/best-practices#avoid-reentrancy
+                    if (this.hasOwnProperty(propName)) {
+                        newValue = this[propName];
+                        delete this[propName];
+                    }
+                    else if (prototype.hasOwnProperty(propName) &&
+                        typeof this[propName] === 'number' &&
+                        this[propName] == newValue) {
+                        // if the propName exists on the prototype of `Cstr`, this update may be a result of Stencil using native
+                        // APIs to reflect props as attributes. Calls to `setAttribute(someElement, propName)` will result in
+                        // `propName` to be converted to a `DOMString`, which may not be what we want for other primitive props.
+                        return;
+                    }
+                    this[propName] = newValue === null && typeof this[propName] === 'boolean' ? false : newValue;
+                });
+            };
+            // create an array of attributes to observe
+            // and also create a map of html attribute name to js property name
+            Cstr.observedAttributes = members
+                .filter(([_, m]) => m[0] & 15 /* HasAttribute */) // filter to only keep props that should match attributes
+                .map(([propName, m]) => {
+                const attrName = m[1] || propName;
+                attrNameToPropName.set(attrName, propName);
+                return attrName;
+            });
+        }
+    }
+    return Cstr;
+};
+const initializeComponent$1 = async (elm, hostRef, cmpMeta, hmrVersionId, Cstr) => {
+    // initializeComponent
+    if ((hostRef.$flags$ & 32 /* hasInitializedComponent */) === 0) {
+        {
+            // sync constructor component
+            Cstr = elm.constructor;
+            hostRef.$flags$ |= 32 /* hasInitializedComponent */;
+            // wait for the CustomElementRegistry to mark the component as ready before setting `isWatchReady`. Otherwise,
+            // watchers may fire prematurely if `customElements.get()`/`customElements.whenDefined()` resolves _before_
+            // Stencil has completed instantiating the component.
+            customElements.whenDefined(cmpMeta.$tagName$).then(() => (hostRef.$flags$ |= 128 /* isWatchReady */));
+        }
+        if (Cstr.style) {
+            // this component has styles but we haven't registered them yet
+            let style = Cstr.style;
+            const scopeId = getScopeId$1(cmpMeta);
+            if (!styles$1.has(scopeId)) {
+                const endRegisterStyles = createTime$1('registerStyles', cmpMeta.$tagName$);
+                registerStyle$1(scopeId, style, !!(cmpMeta.$flags$ & 1 /* shadowDomEncapsulation */));
+                endRegisterStyles();
+            }
+        }
+    }
+    // we've successfully created a lazy instance
+    const ancestorComponent = hostRef.$ancestorComponent$;
+    const schedule = () => scheduleUpdate$1(hostRef, true);
+    if (ancestorComponent && ancestorComponent['s-rc']) {
+        // this is the initial load and this component it has an ancestor component
+        // but the ancestor component has NOT fired its will update lifecycle yet
+        // so let's just cool our jets and wait for the ancestor to continue first
+        // this will get fired off when the ancestor component
+        // finally gets around to rendering its lazy self
+        // fire off the initial update
+        ancestorComponent['s-rc'].push(schedule);
+    }
+    else {
+        schedule();
+    }
+};
+const connectedCallback$1 = (elm) => {
+    if ((plt$1.$flags$ & 1 /* isTmpDisconnected */) === 0) {
+        const hostRef = getHostRef$1(elm);
+        const cmpMeta = hostRef.$cmpMeta$;
+        const endConnected = createTime$1('connectedCallback', cmpMeta.$tagName$);
+        if (!(hostRef.$flags$ & 1 /* hasConnected */)) {
+            // first time this component has connected
+            hostRef.$flags$ |= 1 /* hasConnected */;
+            {
+                // find the first ancestor component (if there is one) and register
+                // this component as one of the actively loading child components for its ancestor
+                let ancestorComponent = elm;
+                while ((ancestorComponent = ancestorComponent.parentNode || ancestorComponent.host)) {
+                    // climb up the ancestors looking for the first
+                    // component that hasn't finished its lifecycle update yet
+                    if (ancestorComponent['s-p']) {
+                        // we found this components first ancestor component
+                        // keep a reference to this component's ancestor component
+                        attachToAncestor$1(hostRef, (hostRef.$ancestorComponent$ = ancestorComponent));
+                        break;
+                    }
+                }
+            }
+            // Lazy properties
+            // https://developers.google.com/web/fundamentals/web-components/best-practices#lazy-properties
+            if (cmpMeta.$members$) {
+                Object.entries(cmpMeta.$members$).map(([memberName, [memberFlags]]) => {
+                    if (memberFlags & 31 /* Prop */ && elm.hasOwnProperty(memberName)) {
+                        const value = elm[memberName];
+                        delete elm[memberName];
+                        elm[memberName] = value;
+                    }
+                });
+            }
+            {
+                initializeComponent$1(elm, hostRef, cmpMeta);
+            }
+        }
+        endConnected();
+    }
+};
+const disconnectedCallback$1 = (elm) => {
+    if ((plt$1.$flags$ & 1 /* isTmpDisconnected */) === 0) {
+        getHostRef$1(elm);
+    }
+};
+const proxyCustomElement$1 = (Cstr, compactMeta) => {
+    const cmpMeta = {
+        $flags$: compactMeta[0],
+        $tagName$: compactMeta[1],
+    };
+    {
+        cmpMeta.$members$ = compactMeta[2];
+    }
+    Object.assign(Cstr.prototype, {
+        __registerHost() {
+            registerHost$1(this, cmpMeta);
+        },
+        connectedCallback() {
+            connectedCallback$1(this);
+        },
+        disconnectedCallback() {
+            disconnectedCallback$1(this);
+        },
+        __attachShadow() {
+            {
+                {
+                    this.attachShadow({ mode: 'open' });
+                }
+            }
+        },
+    });
+    Cstr.is = cmpMeta.$tagName$;
+    return proxyComponent$1(Cstr, cmpMeta);
+};
+const setAssetPath$1 = (path) => (plt$1.$resourcesUrl$ = path);
+const setPlatformOptions$1 = (opts) => Object.assign(plt$1, opts);
+const hostRefs$1 = new WeakMap();
+const getHostRef$1 = (ref) => hostRefs$1.get(ref);
+const registerHost$1 = (elm, cmpMeta) => {
+    const hostRef = {
+        $flags$: 0,
+        $hostElement$: elm,
+        $cmpMeta$: cmpMeta,
+        $instanceValues$: new Map(),
+    };
+    {
+        hostRef.$onReadyPromise$ = new Promise((r) => (hostRef.$onReadyResolve$ = r));
+        elm['s-p'] = [];
+        elm['s-rc'] = [];
+    }
+    return hostRefs$1.set(elm, hostRef);
+};
+const consoleError$1 = (e, el) => (0, console.error)(e, el);
+const styles$1 = new Map();
+const queueDomReads$1 = [];
+const queueDomWrites$1 = [];
+const queueTask$1 = (queue, write) => (cb) => {
+    queue.push(cb);
+    if (!queuePending$1) {
+        queuePending$1 = true;
+        if (write && plt$1.$flags$ & 4 /* queueSync */) {
+            nextTick$1(flush$1);
+        }
+        else {
+            plt$1.raf(flush$1);
+        }
+    }
+};
+const consume$1 = (queue) => {
+    for (let i = 0; i < queue.length; i++) {
+        try {
+            queue[i](performance.now());
+        }
+        catch (e) {
+            consoleError$1(e);
+        }
+    }
+    queue.length = 0;
+};
+const flush$1 = () => {
+    // always force a bunch of medium callbacks to run, but still have
+    // a throttle on how many can run in a certain time
+    // DOM READS!!!
+    consume$1(queueDomReads$1);
+    // DOM WRITES!!!
+    {
+        consume$1(queueDomWrites$1);
+        if ((queuePending$1 = queueDomReads$1.length > 0)) {
+            // still more to do yet, but we've run out of time
+            // let's let this thing cool off and try again in the next tick
+            plt$1.raf(flush$1);
+        }
+    }
+};
+const nextTick$1 = /*@__PURE__*/ (cb) => promiseResolve$1().then(cb);
+const writeTask$1 = /*@__PURE__*/ queueTask$1(queueDomWrites$1, true);
 
 let scopeId;
 let contentRef;
@@ -347,7 +1164,7 @@ const isComplexType = (o) => {
 // const stack: any[] = [];
 // export function h(nodeName: string | d.FunctionalComponent, vnodeData: d.PropsType, child?: d.ChildType): d.VNode;
 // export function h(nodeName: string | d.FunctionalComponent, vnodeData: d.PropsType, ...children: d.ChildType[]): d.VNode;
-const h = (nodeName, vnodeData, ...children) => {
+const h$1 = (nodeName, vnodeData, ...children) => {
     let child = null;
     let key = null;
     let slotName = null;
@@ -469,7 +1286,7 @@ const convertToPrivate = (node) => {
         if (node.vname) {
             vnodeData.name = node.vname;
         }
-        return h(node.vtag, vnodeData, ...(node.vchildren || []));
+        return h$1(node.vtag, vnodeData, ...(node.vchildren || []));
     }
     const vnode = newVNode(node.vtag, node.vtext);
     vnode.$attrs$ = node.vattrs;
@@ -1153,7 +1970,7 @@ const renderVdom = (hostRef, renderFnResults) => {
     const hostElm = hostRef.$hostElement$;
     const cmpMeta = hostRef.$cmpMeta$;
     const oldVNode = hostRef.$vnode$ || newVNode(null, null);
-    const rootVnode = isHost(renderFnResults) ? renderFnResults : h(null, null, renderFnResults);
+    const rootVnode = isHost(renderFnResults) ? renderFnResults : h$1(null, null, renderFnResults);
     hostTagName = hostElm.tagName;
     // <Host> runtime check
     if (BUILD.isDev && Array.isArray(renderFnResults) && renderFnResults.some(isHost)) {
@@ -1566,9 +2383,9 @@ const appDidLoad = (who) => {
     if (BUILD.asyncQueue) {
         plt.$flags$ |= 2 /* appLoaded */;
     }
-    nextTick(() => emitEvent(win, 'appload', { detail: { namespace: NAMESPACE } }));
+    nextTick(() => emitEvent(win, 'appload', { detail: { namespace: NAMESPACE$1 } }));
     if (BUILD.profile && performance.measure) {
-        performance.measure(`[Stencil] ${NAMESPACE} initial load (by ${who})`, 'st:app:start');
+        performance.measure(`[Stencil] ${NAMESPACE$1} initial load (by ${who})`, 'st:app:start');
     }
 };
 const safeCall = (instance, method, arg) => {
@@ -1591,7 +2408,7 @@ const emitLifecycleEvent = (elm, lifecycleName) => {
             bubbles: true,
             composed: true,
             detail: {
-                namespace: NAMESPACE,
+                namespace: NAMESPACE$1,
             },
         });
     }
@@ -2249,7 +3066,7 @@ const disconnectedCallback = (elm) => {
         }
     }
 };
-const defineCustomElement = (Cstr, compactMeta) => {
+const defineCustomElement$4 = (Cstr, compactMeta) => {
     customElements.define(compactMeta[1], proxyCustomElement(Cstr, compactMeta));
 };
 const proxyCustomElement = (Cstr, compactMeta) => {
@@ -3028,4 +3845,135 @@ const Build = {
     isTesting: BUILD.isTesting ? true : false,
 };
 
-export { BUILD as B, CSS as C, H, NAMESPACE as N, promiseResolve as a, bootstrapLazy as b, consoleDevInfo as c, doc as d, Host as e, getContext as f, getElement as g, h, plt as p, registerInstance as r, win as w };
+// create a shadow function for h() which replaces all child elements of given namesapce prefix defined in stencil.config.ts
+// import this h() instead of stencil/core's
+function h(...args) {
+    // rename own components by namespace prefix defined in stencil.config.ts 
+    if (plt.replaceNSPrefix &&
+        typeof (args[0]) === 'string' &&
+        args[0].indexOf(Env.nsPrefix + '-') > -1) {
+        args[0] = `${plt.replaceNSPrefix}-${args[0]}`;
+    }
+    switch (args.length) {
+        case 1:
+            return h$3(args[0]);
+        case 2:
+            return h$3(args[0], args[1]);
+        case 3:
+            return h$3(args[0], args[1], args[2]);
+        default:
+            return h$3(args[0], args[1], args.slice(2));
+    }
+}
+
+function defineCustomElements(setPlatformOptions, components, nameSpacePrefix) {
+    if (nameSpacePrefix != null) {
+        // set namespace prefix for all custom child components
+        // e.g. return <lux-child /> will be rendered as <myns-lux-child />
+        setPlatformOptions({
+            replaceNSPrefix: nameSpacePrefix
+        });
+    }
+    // create for all components a custome elements with customized prefix
+    for (const comp in components) {
+        if (Object.prototype.hasOwnProperty.call(components, comp)) {
+            const compClass = components[comp];
+            customElements.define(`${nameSpacePrefix}-${compClass.is}`, compClass);
+        }
+    }
+}
+
+const myChildCss = ":host{display:block}";
+
+let MyChild$1 = class extends H$1 {
+  constructor() {
+    super();
+    this.__registerHost();
+    this.__attachShadow();
+  }
+  render() {
+    return (h$2(Host$1, null, "... and this is my child!"));
+  }
+  static get style() { return myChildCss; }
+};
+MyChild$1 = /*@__PURE__*/ proxyCustomElement$1(MyChild$1, [1, "my-child"]);
+function defineCustomElement$3() {
+  if (typeof customElements === "undefined") {
+    return;
+  }
+  const components = ["my-child"];
+  components.forEach(tagName => { switch (tagName) {
+    case "my-child":
+      if (!customElements.get(tagName)) {
+        customElements.define(tagName, MyChild$1);
+      }
+      break;
+  } });
+}
+
+function format(first, middle, last) {
+  return (first || '') + (middle ? ` ${middle}` : '') + (last ? ` ${last}` : '');
+}
+
+const myComponentCss = ":host{display:block}";
+
+let MyComponent$1 = class extends H$1 {
+  constructor() {
+    super();
+    this.__registerHost();
+    this.__attachShadow();
+  }
+  componentWillRender() {
+    console.log('##########', getMessage());
+  }
+  getText() {
+    return format(this.first, this.middle, this.last);
+  }
+  render() {
+    return h("div", null, "Hello, World! I'm ", this.getText(), h("span", null, h("slot", null)), h("my-child", null));
+  }
+  static get style() { return myComponentCss; }
+};
+MyComponent$1 = /*@__PURE__*/ proxyCustomElement$1(MyComponent$1, [1, "my-component", {
+    "first": [1],
+    "middle": [1],
+    "last": [1]
+  }]);
+function defineCustomElement$1() {
+  if (typeof customElements === "undefined") {
+    return;
+  }
+  const components = ["my-component", "my-child"];
+  components.forEach(tagName => { switch (tagName) {
+    case "my-component":
+      if (!customElements.get(tagName)) {
+        customElements.define(tagName, MyComponent$1);
+      }
+      break;
+    case "my-child":
+      if (!customElements.get(tagName)) {
+        defineCustomElement$3();
+      }
+      break;
+  } });
+}
+
+const MyComponent = MyComponent$1;
+const defineCustomElement$2 = defineCustomElement$1;
+
+const MyChild = MyChild$1;
+const defineCustomElement = defineCustomElement$3;
+
+setMessage('SAK');
+defineCustomElements(setPlatformOptions$1, [MyComponent, MyChild], 'wmlist');
+const appGlobalScript = async () => {
+  /**
+   * The code to be executed should be placed within a default function that is
+   * exported by the global script. Ensure all of the code in the global script
+   * is wrapped in the function() that is exported.
+   */
+};
+
+const globalScripts = appGlobalScript;
+
+export { globalScripts as g };

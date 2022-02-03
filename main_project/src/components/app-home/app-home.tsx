@@ -1,9 +1,9 @@
 import { Component, h, Host } from '@stencil/core';
-import {MyComponent} from 'lib/dist/components/my-component'
-import {MyChild} from 'lib/dist/components/my-child'
+// import {MyComponent} from 'lib/dist/components/my-component'
+// import {MyChild} from 'lib/dist/components/my-child'
 
-customElements.define('wmlist-component', MyComponent);
-customElements.define('wmlist-child', MyChild);
+// customElements.define('wmlist-component', MyComponent);
+// customElements.define('wmlist-child', MyChild);
 
 @Component({
   tag: 'app-home',
@@ -14,7 +14,7 @@ export class AppHome {
     return (
       <Host>
         <my-component first="MY-COMPONENT">👻</my-component>
-        <wmlist-component first="PREFIX-MY-COMPONENT">🤓</wmlist-component>
+        <wmlist-my-component first="PREFIX-MY-COMPONENT">🤓</wmlist-my-component>
 
         <stencil-route-link url="/profile/stencil">
           <button>Profile page</button>

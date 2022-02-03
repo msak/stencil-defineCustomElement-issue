@@ -1,5 +1,5 @@
-import { r as registerInstance, g as getElement } from './index-9606f801.js';
-import { A as ActiveRouter } from './active-router-ec7f2ca1.js';
+import { r as registerInstance, g as getElement } from './index-76361fa5.js';
+import { A as ActiveRouter } from './active-router-5c26e5fb.js';
 
 let RouteTitle = class {
   constructor(hostRef) {
