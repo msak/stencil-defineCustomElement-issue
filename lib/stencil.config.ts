@@ -1,5 +1,6 @@
 
 import { Config } from "@stencil/core/internal";
+import { nodeResolve } from '@rollup/plugin-node-resolve';
 
 const ns = 'lib';
 export const config: Config = {
@@ -11,9 +12,16 @@ export const config: Config = {
   env: {
     nsPrefix : 'my'
   },
-  nodeResolve: {
-    only: [
-      '' /* needs to be set to avoid bundling any peer dependency */
+  // nodeResolve: {
+  //   only: [
+  //     '' /* needs to be set to avoid bundling any peer dependency */
+  //   ],
+  // },
+  rollupPlugins: {
+    before: [
+      nodeResolve({
+        resolveOnly: [''],
+      }),
     ],
   },
   outputTargets: [

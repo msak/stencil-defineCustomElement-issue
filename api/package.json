@@ -1,5 +1,5 @@
 {
-  "name": "api",
+  "name": "@sak/api",
   "version": "1.0.0",
   "description": "API Demo",
   "module": "index.js",
